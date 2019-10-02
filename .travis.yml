@@ -1,19 +1,24 @@
 ---
 language: python
+cache: pip
+
 python:
   - "3.6.5"
   - "3.7-dev"
+
 services:
-  - docker
-cache: pip
+  - docker:dind
+
 install:
   - pip install -U setuptools
   - pip install poetry
   - poetry install
   - pip install codacy-coverage
+
 after_success:
   - coverage xml
   - CODACY_PROJECT_TOKEN=aee98ac5d1544fdc91857371cbb877a0 python-codacy-coverage -r coverage.xml
+
 jobs:
   include:
     - stage: "Functional"
@@ -24,5 +29,6 @@ jobs:
         - mkdir -p /tmp/fastlane-tests/{mongo,redis}
         - docker-compose --project-name fastlane-tests -f ./docker-compose-func-ci.yml up -d
       script: make func
+
 script:
   - make deps unit
