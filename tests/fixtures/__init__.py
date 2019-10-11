@@ -1,4 +1,5 @@
 # Standard Library
+from os import getenv
 from os.path import abspath, dirname, join
 from uuid import uuid4
 
@@ -12,7 +13,8 @@ from fastlane.config import Config
 from fastlane.models.job import Job
 from fastlane.models.task import Task
 
-ROOT_CONFIG = abspath(join(dirname(__file__), "..", "testing.conf"))
+CONFIG_FILE = getenv('CONFIG_CI_FILE', "testing.conf")
+ROOT_CONFIG = abspath(join(dirname(__file__), "..", CONFIG_FILE))
 
 
 @pytest.fixture

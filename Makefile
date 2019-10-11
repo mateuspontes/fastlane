@@ -55,13 +55,13 @@ endif
 stop-deps-func:
 ifdef COMPOSE
 	@echo "Stopping func tests dependencies..."
-	@docker-compose --project-name fastlane-tests -f ./docker-compose-func-tests.yml down -v
+	@docker-compose --project-name fastlane-tests -f ./docker-compose-tests.yml down -v
 endif
 
-deps-func: stop-deps stop-deps-func
+deps-func: stop-deps-func
 ifdef COMPOSE
 	@echo "Starting func tests dependencies..."
-	@docker-compose --project-name fastlane-tests -f ./docker-compose-func-tests.yml up -d
+	@docker-compose --project-name fastlane-tests -f ./docker-compose-tests.yml up -d
 	@echo "Func tests dependencies started successfully."
 endif
 
@@ -74,7 +74,7 @@ docker-push: docker-build
 	@docker tag fastlane heynemann/fastlane:latest
 	@docker push heynemann/fastlane:latest
 
-test: deps unit deps-func func
+test: deps unit func
 
 unit:
 	@poetry run pytest -sv --quiet --nf --cov=fastlane tests/unit/
